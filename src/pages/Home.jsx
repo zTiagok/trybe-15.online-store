@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Content from '../components/Content';
+import { getCategories } from '../services/api';
 
 export default class Home extends Component {
   state = {
     inputValue: '',
+    categoriesArray: [],
+  }
+
+  async componentDidMount() {
+    const categories = await getCategories();
+
+    this.setState({ categoriesArray: categories });
   }
 
   onChangeEvent = ({ target }) => {
@@ -13,8 +21,14 @@ export default class Home extends Component {
     });
   }
 
+  createCategory = (category) => (
+    <button type="button" data-testid="category" key={ category.id }>
+      { category.name }
+    </button>
+  );
+
   render() {
-    const { inputValue } = this.state;
+    const { inputValue, categoriesArray } = this.state;
     const emptyMessage = (
       <p id="home-message">
         Digite algum termo de pesquisa ou escolha uma categoria.
@@ -39,6 +53,9 @@ export default class Home extends Component {
           />
           { !inputValue.length
               && emptyMessage}
+        </div>
+        <div id="home-categories">
+          {categoriesArray.map((category) => this.createCategory(category))}
         </div>
       </div>
     );
