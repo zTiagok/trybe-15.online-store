@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Content from '../components/Content';
 
 export default class Home extends Component {
   state = {
@@ -20,14 +22,24 @@ export default class Home extends Component {
     );
 
     return (
-      <div id="home-list" data-testid="home-initial-message">
-        <input
-          type="text"
-          id="search-input"
-          onChange={ this.onChangeEvent }
-        />
-        { !inputValue.length
-          && emptyMessage}
+      <div data-testid="home-initial-message">
+
+        {/* LINKS NA HOMEPAGE */}
+        <Link to="/cart" data-testid="shopping-cart-button">
+          Carrinho de Compras
+        </Link>
+
+        <Content />
+
+        <div id="home-list">
+          <input
+            type="text"
+            id="search-input"
+            onChange={ this.onChangeEvent }
+          />
+          { !inputValue.length
+              && emptyMessage}
+        </div>
       </div>
     );
   }
