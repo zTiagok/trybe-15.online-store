@@ -13,6 +13,9 @@ export default class Product extends Component {
           <h2>{ name }</h2>
           <img src={ image } alt="Product" />
           <p>{` R$ ${price}`}</p>
+          <p>
+            { id }
+          </p>
         </div>
       </div>
     );
@@ -20,7 +23,8 @@ export default class Product extends Component {
 }
 
 Product.propTypes = {
-  itemName: PropTypes.string,
-  itemImage: PropTypes.string,
-  itemPrice: PropTypes.string,
+  name: PropTypes.string,
+  price: PropTypes.string,
+  image: PropTypes.string,
+  id: PropTypes.string,
 }.isRequired;
