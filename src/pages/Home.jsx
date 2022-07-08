@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Content from '../components/Content';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import { getCategories,
+  getProductsFromQuery } from '../services/api';
 // import CartList from './CartList';
 import ItemsList from '../components/ItemsList';
 
@@ -24,71 +25,93 @@ export default class Home extends Component {
     });
   }
 
+  oi = (oi) => {
+    console.log(oi);
+  }
+
   createCategory = (category) => (
-    <button type="button" data-testid="category" key={ category.id }>
+    <button
+      type="button"
+      data-testid="category"
+      key={ category.id }
+      onClick={ () => this.oi(category.id) }
+      className="categories-buttons"
+    >
       { category.name }
     </button>
   );
 
   searchItems = async () => {
     const { inputValue } = this.state;
-    const categories = await getProductsFromCategoryAndQuery(inputValue, 'q');
+    const categories = await getProductsFromQuery(inputValue);
     const { results } = categories;
     this.setState({ searchReturn: results });
     if (results.length === 0) {
-      this.setState({ notFound: 'Nenhum produto foi encontrado' });
+      this.setState({ notFound: 'Nenhum produto foi encontrado.' });
     }
   }
 
   render() {
     const { inputValue, categoriesArray, searchReturn, notFound } = this.state;
+
     const emptyMessage = (
       <p id="home-message">
         Digite algum termo de pesquisa ou escolha uma categoria.
       </p>
     );
+
+    const homeSearch = (
+      <div id="home-list">
+        <input
+          type="text"
+          id="search-input"
+          value={ inputValue }
+          onChange={ this.onChangeEvent }
+          data-testid="query-input"
+        />
+        <button
+          type="button"
+          data-testid="query-button"
+          onClick={ this.searchItems }
+        >
+          Pesquisar
+        </button>
+        { searchReturn ? (
+          <div>
+            <h2>{notFound}</h2>
+            {searchReturn.map((item, index) => (
+              <ItemsList
+                key={ index }
+                itemName={ item.title }
+                itemImage={ item.thumbnail }
+                itemPrice={ item.price }
+                data-testid="product"
+              />
+            ))}
+          </div>
+        ) : emptyMessage}
+      </div>
+    );
+
     return (
-      <div data-testid="home-initial-message">
+      <main data-testid="home-initial-message">
 
         {/* LINKS NA HOMEPAGE */}
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Carrinho de Compras
-        </Link>
+        <nav>
+          <Link to="/cart" data-testid="shopping-cart-button" className="links">
+            Carrinho de Compras.
+          </Link>
+        </nav>
+        {/* ----------------- */}
 
         <Content />
-        <div id="home-list">
-          <input
-            type="text"
-            id="search-input"
-            value={ inputValue }
-            onChange={ this.onChangeEvent }
-            data-testid="query-input"
-          />
-          <button
-            type="button"
-            data-testid="query-button"
-            onClick={ this.searchItems }
-          >
-            Pesquisar
-          </button>
-          { searchReturn ? (
-            <div>
-              <h2>{notFound}</h2>
-              {searchReturn.map((item, index) => (
-                <ItemsList
-                  key={ index }
-                  itemName={ item.title }
-                  itemImage={ item.thumbnail }
-                  itemPrice={ item.price }
-                />
-              ))}
-            </div>
-          ) : emptyMessage}
-        </div>
+
         <div id="home-categories">
           {categoriesArray.map((category) => this.createCategory(category))}
         </div>
-      </div>
+
+        {homeSearch}
+      </main>
     );
   }
 }
