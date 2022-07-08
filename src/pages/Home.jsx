@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Content from '../components/Content';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import { getCategories,
+  getProductsFromQuery } from '../services/api';
 // import CartList from './CartList';
 import ItemsList from '../components/ItemsList';
 
@@ -25,14 +26,19 @@ export default class Home extends Component {
   }
 
   createCategory = (category) => (
-    <button type="button" data-testid="category" key={ category.id }>
+    <button
+      type="button"
+      data-testid="category"
+      key={ category.id }
+      className="categories-buttons"
+    >
       { category.name }
     </button>
   );
 
   searchItems = async () => {
     const { inputValue } = this.state;
-    const categories = await getProductsFromCategoryAndQuery(inputValue, 'q');
+    const categories = await getProductsFromQuery(inputValue);
     const { results } = categories;
     this.setState({ searchReturn: results });
     if (results.length === 0) {
@@ -74,6 +80,7 @@ export default class Home extends Component {
                 itemName={ item.title }
                 itemImage={ item.thumbnail }
                 itemPrice={ item.price }
+                data-testid="product"
               />
             ))}
           </div>
@@ -85,9 +92,12 @@ export default class Home extends Component {
       <main data-testid="home-initial-message">
 
         {/* LINKS NA HOMEPAGE */}
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Carrinho de Compras
-        </Link>
+        <nav>
+          <Link to="/cart" data-testid="shopping-cart-button" className="links">
+            Carrinho de Compras
+          </Link>
+        </nav>
+        {/* ----------------- */}
 
         <Content />
 
