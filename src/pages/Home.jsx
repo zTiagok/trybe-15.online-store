@@ -94,7 +94,7 @@ export default class Home extends Component {
         {/* LINKS NA HOMEPAGE */}
         <nav>
           <Link to="/cart" data-testid="shopping-cart-button" className="links">
-            Carrinho de Compras
+            Carrinho de Compras.
           </Link>
         </nav>
         {/* ----------------- */}
