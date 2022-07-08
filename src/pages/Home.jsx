@@ -36,19 +36,53 @@ export default class Home extends Component {
     const { results } = categories;
     this.setState({ searchReturn: results });
     if (results.length === 0) {
-      this.setState({ notFound: 'Nenhum produto foi encontrado' });
+      this.setState({ notFound: 'Nenhum produto foi encontrado.' });
     }
   }
 
   render() {
     const { inputValue, categoriesArray, searchReturn, notFound } = this.state;
+
     const emptyMessage = (
       <p id="home-message">
         Digite algum termo de pesquisa ou escolha uma categoria.
       </p>
     );
+
+    const homeSearch = (
+      <div id="home-list">
+        <input
+          type="text"
+          id="search-input"
+          value={ inputValue }
+          onChange={ this.onChangeEvent }
+          data-testid="query-input"
+        />
+        <button
+          type="button"
+          data-testid="query-button"
+          onClick={ this.searchItems }
+        >
+          Pesquisar
+        </button>
+        { searchReturn ? (
+          <div>
+            <h2>{notFound}</h2>
+            {searchReturn.map((item, index) => (
+              <ItemsList
+                key={ index }
+                itemName={ item.title }
+                itemImage={ item.thumbnail }
+                itemPrice={ item.price }
+              />
+            ))}
+          </div>
+        ) : emptyMessage}
+      </div>
+    );
+
     return (
-      <div data-testid="home-initial-message">
+      <main data-testid="home-initial-message">
 
         {/* LINKS NA HOMEPAGE */}
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -56,39 +90,13 @@ export default class Home extends Component {
         </Link>
 
         <Content />
-        <div id="home-list">
-          <input
-            type="text"
-            id="search-input"
-            value={ inputValue }
-            onChange={ this.onChangeEvent }
-            data-testid="query-input"
-          />
-          <button
-            type="button"
-            data-testid="query-button"
-            onClick={ this.searchItems }
-          >
-            Pesquisar
-          </button>
-          { searchReturn ? (
-            <div>
-              <h2>{notFound}</h2>
-              {searchReturn.map((item, index) => (
-                <ItemsList
-                  key={ index }
-                  itemName={ item.title }
-                  itemImage={ item.thumbnail }
-                  itemPrice={ item.price }
-                />
-              ))}
-            </div>
-          ) : emptyMessage}
-        </div>
+
         <div id="home-categories">
           {categoriesArray.map((category) => this.createCategory(category))}
         </div>
-      </div>
+
+        {homeSearch}
+      </main>
     );
   }
 }

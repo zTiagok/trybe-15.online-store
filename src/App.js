@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
-import './App.css';
+// import './App.css';
+import './placeholder.css';
 
 function App() {
   return (
