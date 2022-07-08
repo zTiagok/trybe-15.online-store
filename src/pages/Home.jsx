@@ -25,11 +25,16 @@ export default class Home extends Component {
     });
   }
 
+  oi = (oi) => {
+    console.log(oi);
+  }
+
   createCategory = (category) => (
     <button
       type="button"
       data-testid="category"
       key={ category.id }
+      onClick={ () => this.oi(category.id) }
       className="categories-buttons"
     >
       { category.name }
