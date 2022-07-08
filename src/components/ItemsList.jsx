@@ -10,28 +10,32 @@ export default class ItemsList extends Component {
       itemPrice,
       itemID,
       itemFunction,
+      addToCart,
     } = this.props;
 
     return (
-      // <Link
-      //   to={ `/product/${itemID}` }
-      //   onClick={ itemFunction }
-      //   data-testid="product-detail-link"
-      // >
-      <Link
-        to={ {
-          pathname: `/product/${itemID}`,
-          state: { name: itemName, image: itemImage, price: itemPrice, id: itemID },
-        } }
-        onClick={ itemFunction }
-        data-testid="product-detail-link"
-      >
-        <div data-testid="product">
-          <h2>{ itemName }</h2>
-          <img src={ itemImage } alt="Product" />
-          <p>{` R$ ${itemPrice}`}</p>
-        </div>
-      </Link>
+      <div className="product-list">
+        <Link
+          to={ {
+            pathname: `/product/${itemID}`,
+            state: { name: itemName, image: itemImage, price: itemPrice, id: itemID },
+          } }
+          onClick={ itemFunction }
+          data-testid="product-detail-link"
+        >
+          <div data-testid="product">
+            <h2>{itemName}</h2>
+            <img src={ itemImage } alt="Product" />
+            <p>{` R$ ${itemPrice}`}</p>
+          </div>
+        </Link>
+        <button
+          type="button"
+          onClick={ addToCart }
+        >
+          Adicionar ao Carrinho!
+        </button>
+      </div>
     );
   }
 }

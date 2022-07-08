@@ -22,6 +22,10 @@ export default class Home extends Component {
     this.setState({ categoriesArray: categories });
   }
 
+  addToCart = (event) => {
+    console.log(event.target.parentNode.firstChild.firstChild);
+  };
+
   renderProduct = () => {
     this.setState({ pageRender: true });
   }
@@ -35,7 +39,6 @@ export default class Home extends Component {
   getCategoryID = async (id) => {
     const response = await getProductsFromCategory(id);
     const { results } = response;
-    console.log(id);
 
     this.setState({ categoryID: results });
   }
@@ -99,6 +102,7 @@ export default class Home extends Component {
                 itemImage={ item.thumbnail }
                 itemPrice={ item.price }
                 itemID={ item.id }
+                addToCart={ this.addToCart }
                 data-testid="product"
               />
             ))}
@@ -123,6 +127,7 @@ export default class Home extends Component {
               itemPrice={ item.price }
               itemID={ item.id }
               itemFunction={ this.renderProduct }
+              addToCart={ this.addToCart }
             />
           ))}
         </div>
