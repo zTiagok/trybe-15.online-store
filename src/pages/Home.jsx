@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Content from '../components/Content';
 import { getCategories,
-  getProductsFromQuery } from '../services/api';
+  getProductsFromQuery,
+  getProductsFromCategory } from '../services/api';
 // import CartList from './CartList';
 import ItemsList from '../components/ItemsList';
 
@@ -12,6 +13,7 @@ export default class Home extends Component {
     categoriesArray: [],
     searchReturn: undefined,
     notFound: '',
+    categoryID: [],
   }
 
   async componentDidMount() {
@@ -25,8 +27,11 @@ export default class Home extends Component {
     });
   }
 
-  oi = (oi) => {
-    console.log(oi);
+  getCategoryID = async (id) => {
+    const response = await getProductsFromCategory(id);
+    const { results } = response;
+
+    this.setState({ categoryID: results });
   }
 
   createCategory = (category) => (
@@ -34,7 +39,7 @@ export default class Home extends Component {
       type="button"
       data-testid="category"
       key={ category.id }
-      onClick={ () => this.oi(category.id) }
+      onClick={ () => this.getCategoryID(category.id) }
       className="categories-buttons"
     >
       { category.name }
@@ -52,7 +57,8 @@ export default class Home extends Component {
   }
 
   render() {
-    const { inputValue, categoriesArray, searchReturn, notFound } = this.state;
+    const { inputValue, categoriesArray, searchReturn, notFound,
+      categoryID } = this.state;
 
     const emptyMessage = (
       <p id="home-message">
@@ -106,8 +112,18 @@ export default class Home extends Component {
 
         <Content />
 
-        <div id="home-categories">
+        <div id="home-products">
           {categoriesArray.map((category) => this.createCategory(category))}
+        </div>
+        <div id="home-categories">
+          {categoryID.map((item, index) => (
+            <ItemsList
+              key={ index }
+              itemName={ item.title }
+              itemImage={ item.thumbnail }
+              itemPrice={ item.price }
+            />
+          ))}
         </div>
 
         {homeSearch}
