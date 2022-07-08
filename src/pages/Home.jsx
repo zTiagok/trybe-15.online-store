@@ -14,11 +14,16 @@ export default class Home extends Component {
     searchReturn: undefined,
     notFound: '',
     categoryID: [],
+    pageRender: false,
   }
 
   async componentDidMount() {
     const categories = await getCategories();
     this.setState({ categoriesArray: categories });
+  }
+
+  renderProduct = () => {
+    this.setState({ pageRender: true });
   }
 
   onChangeEvent = ({ target }) => {
@@ -30,6 +35,7 @@ export default class Home extends Component {
   getCategoryID = async (id) => {
     const response = await getProductsFromCategory(id);
     const { results } = response;
+    console.log(id);
 
     this.setState({ categoryID: results });
   }
@@ -58,7 +64,7 @@ export default class Home extends Component {
 
   render() {
     const { inputValue, categoriesArray, searchReturn, notFound,
-      categoryID } = this.state;
+      categoryID, pageRender } = this.state;
 
     const emptyMessage = (
       <p id="home-message">
@@ -88,9 +94,11 @@ export default class Home extends Component {
             {searchReturn.map((item, index) => (
               <ItemsList
                 key={ index }
+                index={ index }
                 itemName={ item.title }
                 itemImage={ item.thumbnail }
                 itemPrice={ item.price }
+                itemID={ item.id }
                 data-testid="product"
               />
             ))}
@@ -99,19 +107,9 @@ export default class Home extends Component {
       </div>
     );
 
-    return (
-      <main data-testid="home-initial-message">
-
-        {/* LINKS NA HOMEPAGE */}
-        <nav>
-          <Link to="/cart" data-testid="shopping-cart-button" className="links">
-            Carrinho de Compras.
-          </Link>
-        </nav>
-        {/* ----------------- */}
-
-        <Content />
-
+    const homePage = (
+      <>
+        {homeSearch}
         <div id="home-products">
           {categoriesArray.map((category) => this.createCategory(category))}
         </div>
@@ -119,15 +117,38 @@ export default class Home extends Component {
           {categoryID.map((item, index) => (
             <ItemsList
               key={ index }
+              index={ index }
               itemName={ item.title }
               itemImage={ item.thumbnail }
               itemPrice={ item.price }
+              itemID={ item.id }
+              itemFunction={ this.renderProduct }
             />
           ))}
         </div>
+      </>
+    );
 
-        {homeSearch}
+    return (
+      <main data-testid="home-initial-message">
+
+        {/* LINKS NA HOMEPAGE */}
+        <nav>
+          <Link to="/cart" data-testid="shopping-cart-button" className="links">
+            Carrinho de Compras
+          </Link>
+        </nav>
+        {/* ----------------- */}
+
+        {pageRender
+          ? <Content />
+          : homePage}
+
       </main>
     );
   }
 }
+
+Home.defaultState = {
+  pageRender: false,
+};
