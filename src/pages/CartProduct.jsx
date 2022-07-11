@@ -18,10 +18,13 @@ export default class CartProduct extends Component {
     let quantityItens = 0;
 
     const productFiltered = productArray.filter((element) => {
-      if (element === productID) {
-        quantityItens += 1;
-      }
+      if (element === productID) quantityItens += 1;
+      return null;
     });
+
+    // if (element === productID) {
+    //   quantityItens += 1;
+    // }
 
     console.log(productFiltered);
     // console.log(productArray);

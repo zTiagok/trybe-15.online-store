@@ -19,7 +19,10 @@ export default class CartList extends Component {
             .then((data) => console.log(data.title))}
           key={id}
         />))} */}
-        <div data-testid="shopping-cart-empty-message">Seu carrinho está vazio</div>
+
+        {array.length
+          ? null
+          : <div data-testid="shopping-cart-empty-message">Seu carrinho está vazio</div>}
       </>
     );
   }
