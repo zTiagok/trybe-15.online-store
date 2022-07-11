@@ -9,7 +9,6 @@ export default class Product extends Component {
     return (
       <div data-testid="product-detail-name">
         <div data-testid="product">
-          {console.log(this.props)}
           <h2>{ name }</h2>
           <img src={ image } alt="Product" />
           <p>{` R$ ${price}`}</p>
