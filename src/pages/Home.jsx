@@ -14,6 +14,7 @@ export default class Home extends Component {
     searchReturn: undefined,
     notFound: '',
     categoryID: [],
+    cartProductID: [],
     pageRender: false,
   }
 
@@ -23,7 +24,10 @@ export default class Home extends Component {
   }
 
   addToCart = (event) => {
-    console.log(event.target.parentNode.firstChild.firstChild);
+    const productID = event.target.parentNode.id;
+    this.setState((prevState) => ({
+      cartProductID: [...prevState.cartProductID, productID],
+    }));
   };
 
   renderProduct = () => {
@@ -39,7 +43,6 @@ export default class Home extends Component {
   getCategoryID = async (id) => {
     const response = await getProductsFromCategory(id);
     const { results } = response;
-
     this.setState({ categoryID: results });
   }
 
@@ -67,7 +70,7 @@ export default class Home extends Component {
 
   render() {
     const { inputValue, categoriesArray, searchReturn, notFound,
-      categoryID, pageRender } = this.state;
+      categoryID, pageRender, cartProductID } = this.state;
 
     const emptyMessage = (
       <p id="home-message">
@@ -139,8 +142,20 @@ export default class Home extends Component {
 
         {/* LINKS NA HOMEPAGE */}
         <nav>
-          <Link to="/cart" data-testid="shopping-cart-button" className="links">
-            Carrinho de Compras
+          <Link
+            to={ {
+              pathname: '/cart',
+              state: { array: cartProductID },
+            } }
+            className="links"
+          >
+            <button
+              type="button"
+              onClick={ this.renderProduct }
+              data-testid="shopping-cart-button"
+            >
+              Carrinho de Compras
+            </button>
           </Link>
         </nav>
         {/* ----------------- */}

@@ -14,7 +14,7 @@ export default class ItemsList extends Component {
     } = this.props;
 
     return (
-      <div className="product-list">
+      <div className="product-list" id={ itemID }>
         <Link
           to={ {
             pathname: `/product/${itemID}`,
@@ -32,6 +32,7 @@ export default class ItemsList extends Component {
         <button
           type="button"
           onClick={ addToCart }
+          data-testid="product-add-to-cart"
         >
           Adicionar ao Carrinho!
         </button>
