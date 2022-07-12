@@ -5,33 +5,58 @@ import { getProduct } from '../services/api';
 export default class CartProduct extends Component {
   state = {
     name: '',
-    quantity: '',
+    quantity: 0,
   }
 
   componentDidMount() {
     this.fetchData();
+    this.getLocalStorage();
   }
 
   fetchData = async () => {
-    const { productID, productArray } = this.props;
-    const data = await getProduct(productID);
-    let quantityItens = 0;
+    const { productArray } = this.props;
+    const itemsIDs = this.getLocalStorage();
+    // console.log('linha 19', itemsIDs);
+    // itemsIDs.reduce((acc, element) => {
+    //   if (element === acc) {
+    //     this.setState((prevState) => ({
+    //       quantity: [...prevState.quantity, +1],
+    //     }));
+    //     // return quantityItens;
+    //   }
+    //   return acc;
+    // });
+    const arrayToString = productArray.toString();
+    let conc = 0;
+    itemsIDs.map((id) => {
+      const data = this.getAPI(id);
 
-    const productFiltered = productArray.filter((element) => {
-      if (element === productID) quantityItens += 1;
-      return null;
+      if (dataElement === arrayToString) {
+        conc += 1;
+        this.setState({ quantity: conc });
+      }
+      this.setState({ name: data.title });
     });
-
-    // if (element === productID) {
-    //   quantityItens += 1;
-    // }
-
-    console.log(productFiltered);
-    // console.log(productArray);
-    // console.log(productID);
-
-    this.setState({ name: data.title, quantity: quantityItens });
+    // const arrayFiltred = itemsIDs.filter((element) => element !== arrayToString);
+    // ;
   };
+
+  getLocalStorage = () => {
+    const localStrg = localStorage.getItem('itemId');
+    const strgSplit = localStrg.split(',');
+    strgSplit.shift();
+    return strgSplit;
+  }
+
+  getAPI = async (paramID) => {
+    const data = await getProduct(paramID);
+    // strgSplit.map(async (productID) => {
+    //   this.setState({ name: data.title, quantity: 0 });
+    //   console.log('linha 35', data);
+    //   return [...data];
+    // });
+    return data;
+  }
 
   render() {
     const { name, quantity } = this.state;
