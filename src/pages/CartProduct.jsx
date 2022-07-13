@@ -5,7 +5,7 @@ import { getProduct } from '../services/api';
 export default class CartProduct extends Component {
   state = {
     name: '',
-    quantity: '',
+    quantity: 0,
   }
 
   componentDidMount() {
@@ -13,25 +13,20 @@ export default class CartProduct extends Component {
   }
 
   fetchData = async () => {
-    const { productID, productArray } = this.props;
-    const data = await getProduct(productID);
-    let quantityItens = 0;
-
-    const productFiltered = productArray.filter((element) => {
-      if (element === productID) quantityItens += 1;
-      return null;
-    });
-
-    // if (element === productID) {
-    //   quantityItens += 1;
-    // }
-
-    console.log(productFiltered);
-    // console.log(productArray);
-    // console.log(productID);
-
-    this.setState({ name: data.title, quantity: quantityItens });
+    const { productID } = this.props;
+    const getAPI = await getProduct(productID);
+    this.setState({ name: getAPI.title });
   };
+
+  getAPI = async (paramID) => {
+    const data = await getProduct(paramID);
+    // strgSplit.map(async (productID) => {
+    //   this.setState({ name: data.title, quantity: 0 });
+    //   console.log('linha 35', data);
+    //   return [...data];
+    // });
+    return data;
+  }
 
   render() {
     const { name, quantity } = this.state;
@@ -47,7 +42,6 @@ export default class CartProduct extends Component {
         </h2>
         <h3
           className="cart-product-quantity"
-          data-testid="shopping-cart-product-quantity"
         >
           { quantity }
         </h3>

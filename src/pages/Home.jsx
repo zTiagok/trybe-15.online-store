@@ -25,9 +25,12 @@ export default class Home extends Component {
 
   addToCart = (event) => {
     const productID = event.target.parentNode.id;
-    this.setState((prevState) => ({
-      cartProductID: [...prevState.cartProductID, productID],
-    }));
+    // this.setState((prevState) => ({
+    //   cartProductID: [...prevState.cartProductID, productID],
+    // }));
+    const prev = JSON.parse(localStorage.getItem('itemId'));
+    if (prev) return localStorage.setItem('itemId', JSON.stringify([...prev, productID]));
+    localStorage.setItem('itemId', JSON.stringify([productID]));
   };
 
   renderProduct = () => {
