@@ -10,43 +10,13 @@ export default class CartProduct extends Component {
 
   componentDidMount() {
     this.fetchData();
-    this.getLocalStorage();
   }
 
   fetchData = async () => {
-    const { productArray } = this.props;
-    const itemsIDs = this.getLocalStorage();
-    // console.log('linha 19', itemsIDs);
-    // itemsIDs.reduce((acc, element) => {
-    //   if (element === acc) {
-    //     this.setState((prevState) => ({
-    //       quantity: [...prevState.quantity, +1],
-    //     }));
-    //     // return quantityItens;
-    //   }
-    //   return acc;
-    // });
-    const arrayToString = productArray.toString();
-    let conc = 0;
-    itemsIDs.map((id) => {
-      const data = this.getAPI(id);
-
-      if (dataElement === arrayToString) {
-        conc += 1;
-        this.setState({ quantity: conc });
-      }
-      this.setState({ name: data.title });
-    });
-    // const arrayFiltred = itemsIDs.filter((element) => element !== arrayToString);
-    // ;
+    const { productID } = this.props;
+    const getAPI = await getProduct(productID);
+    this.setState({ name: getAPI.title });
   };
-
-  getLocalStorage = () => {
-    const localStrg = localStorage.getItem('itemId');
-    const strgSplit = localStrg.split(',');
-    strgSplit.shift();
-    return strgSplit;
-  }
 
   getAPI = async (paramID) => {
     const data = await getProduct(paramID);
@@ -72,7 +42,6 @@ export default class CartProduct extends Component {
         </h2>
         <h3
           className="cart-product-quantity"
-          data-testid="shopping-cart-product-quantity"
         >
           { quantity }
         </h3>
